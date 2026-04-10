@@ -1,0 +1,34 @@
+package br.com.portoseguro.portalcomunicacao.infra;
+
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class OpenApiConfig {
+
+    private static final String SECURITY_SCHEME_NAME = "bearer-jwt";
+
+    @Bean
+    public OpenAPI portalComunicacaoOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Portal Comunicação API")
+                        .description("API REST do portal de comunicação interno - Porto Seguro.")
+                        .summary("VILT Group - Breaking Boundaries")
+                        .version("1.0.0"))
+                .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
+                .components(new Components()
+                        .addSecuritySchemes(SECURITY_SCHEME_NAME,
+                                new SecurityScheme()
+                                        .name(SECURITY_SCHEME_NAME)
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                        .description("Informe o token JWT obtido em POST /api/login (prefixo: Bearer ).")));
+    }
+}

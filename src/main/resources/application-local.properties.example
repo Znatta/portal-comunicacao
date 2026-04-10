@@ -1,0 +1,12 @@
+# Exemplo de configuração local - Crie uma cópia deste arquivo chamada application-local.properties
+spring.datasource.url=jdbc:h2:mem:portaldb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=password
+spring.jpa.show-sql=true
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+# Gere uma chave secreta segura para o JWT
+api.security.token.secret=SUA_CHAVE_SECRETA_AQUI
+spring.jpa.hibernate.ddl-auto=validate
