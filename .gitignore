@@ -51,3 +51,6 @@ application-local.properties
 
 # Help & Temp
 HELP.md
+
+# Gemini CLI Settings
+.gemini/
