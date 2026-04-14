@@ -36,7 +36,7 @@ public class NoticiaService {
         return new NoticiaResponse(noticiaSalva);
     }
 
-    public Page<NoticiaResponse> listar(String busca, Boolean ativo, Pageable pageable){
+    public Page<NoticiaResponse> listar(String busca, Long categoriaId, Boolean ativo, Pageable pageable){
         Specification<Noticia> spec = ((root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
 
         if(busca != null && !busca.isBlank()){
@@ -50,6 +50,12 @@ public class NoticiaService {
             });
         }
 
+        if (categoriaId != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("categoria").get("id"), categoriaId)
+            );
+        }
+
         if(ativo != null){
             spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("ativo"), ativo));
         }
@@ -61,7 +67,7 @@ public class NoticiaService {
 
     public NoticiaResponse buscarPorId(Long id, Boolean ativo) {
         return noticiaRepository.findById(id)
-                .filter(noticia -> ativo == null || !ativo || noticia.getAtivo())
+                .filter(noticia -> ativo == null || noticia.getAtivo().equals(ativo))
                 .map(noticia -> new NoticiaResponse(noticia))
                 .orElseThrow(() -> new EntityNotFoundException("Notícia não encontrada com o ID: " + id));
     }
