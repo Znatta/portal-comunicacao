@@ -14,4 +14,17 @@ public record NoticiaResponse(
         Boolean ativo,
         CategoriaResponse categoria,
         UsuarioResponse autor) {
+
+    public NoticiaResponse(Noticia noticia) {
+        this(
+                noticia.getId(),
+                noticia.getTitulo(),
+                noticia.getSubtitulo(),
+                noticia.getConteudo(),
+                noticia.getDataPublicacao(),
+                noticia.getAtivo(),
+                new CategoriaResponse(noticia.getCategoria()),
+                new UsuarioResponse(noticia.getAutor())
+        );
+    }
 }

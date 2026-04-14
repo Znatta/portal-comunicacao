@@ -31,20 +31,40 @@ CREATE TABLE IF NOT EXISTS noticias (
         REFERENCES usuarios(id)
 );
 
-INSERT INTO usuarios (id, nome, email, senha, ativo, perfil) VALUES
-    (1, 'Administrador', 'admin@portal.com', '$2a$12$15.Z0NX1bEpjx1b8JUXCZ.ZXty.AjRSTZAXFrZCjbQ4A.Xz6r3KH6', TRUE, 'ADMIN'),    -- password admin
-    (2, 'Produtor', 'producer@portal.com', '$2a$12$xpqkBhtMBAH0fy51/WgZNuIVXmMeSdeyUk8VylMBcc.agJxFu59la', TRUE, 'PRODUCER');   -- password producer
+INSERT INTO usuarios (nome, email, senha, ativo, perfil) VALUES
+    ('Administrador', 'admin@portal.com', '$2a$12$15.Z0NX1bEpjx1b8JUXCZ.ZXty.AjRSTZAXFrZCjbQ4A.Xz6r3KH6', TRUE, 'ADMIN'),    -- password admin
+    ('Produtor', 'producer@portal.com', '$2a$12$xpqkBhtMBAH0fy51/WgZNuIVXmMeSdeyUk8VylMBcc.agJxFu59la', TRUE, 'PRODUCER');   -- password producer
 
-INSERT INTO categorias (id, nome, ativo) VALUES
-    (1, 'Comunicados', TRUE),
-    (2, 'Eventos', TRUE),
-    (3, 'Tecnologia', TRUE),
-    (4, 'RH', TRUE),
-    (5, 'Institucional', TRUE);
+INSERT INTO categorias (nome, ativo) VALUES
+    ('Comunicados', TRUE),
+    ('Eventos', TRUE),
+    ('Tecnologia', TRUE),
+    ('RH', TRUE),
+    ('Institucional', TRUE);
 
-INSERT INTO noticias (id, titulo, subtitulo, conteudo, data_publicacao, ativo, id_categoria, id_autor) VALUES
-    (1, 'Portal no ar', 'Primeira versao publicada', 'O portal de comunicacao interno foi disponibilizado para todos os colaboradores.', TIMESTAMP '2026-04-01 09:00:00', TRUE, 5, 1),
-    (2, 'Semana da seguranca', 'Programacao oficial divulgada', 'A semana da seguranca tera palestras tecnicas e treinamentos praticos.', TIMESTAMP '2026-04-02 10:30:00', TRUE, 1, 2),
-    (3, 'Hackathon interno', 'Inscricoes abertas', 'As inscricoes para o hackathon interno estao abertas ate o fim do mes.', TIMESTAMP '2026-04-03 14:00:00', TRUE, 3, 2),
-    (4, 'Atualizacao de beneficios', 'Novas regras de elegibilidade', 'Foram atualizadas as regras de elegibilidade para os beneficios corporativos.', TIMESTAMP '2026-04-04 11:15:00', TRUE, 4, 2),
-    (5, 'Agenda de abril', 'Principais eventos do mes', 'Confira os principais eventos corporativos planejados para o mes de abril.', TIMESTAMP '2026-04-05 08:45:00', TRUE, 2, 2);
+INSERT INTO noticias (titulo, subtitulo, conteudo, data_publicacao, ativo, id_categoria, id_autor) VALUES
+    ('Portal no ar', 'Primeira versao publicada', 'O portal de comunicacao interno foi disponibilizado para todos os colaboradores.', TIMESTAMP '2026-04-01 09:00:00', TRUE, 5, 1),
+    ('Semana da seguranca', 'Programacao oficial divulgada', 'A semana da seguranca tera palestras tecnicas e treinamentos praticos.', TIMESTAMP '2026-04-02 10:30:00', TRUE, 1, 2),
+    ('Hackathon interno', 'Inscricoes abertas', 'As inscricoes para o hackathon interno estao abertas ate o fim do mes.', TIMESTAMP '2026-04-03 14:00:00', TRUE, 3, 2),
+    ('Atualizacao de beneficios', 'Novas regras de elegibilidade', 'Foram atualizadas as regras de elegibilidade para os beneficios corporativos.', TIMESTAMP '2026-04-04 11:15:00', TRUE, 4, 2),
+    ('Agenda de abril', 'Principais eventos do mes', 'Confira os principais eventos corporativos planejados para o mes de abril.', TIMESTAMP '2026-04-05 08:45:00', TRUE, 2, 2),
+    ('Novo Plano de Saúde 2026', 'Confira as mudanças e benefícios', 'O novo plano de saúde entrará em vigor em maio...','2026-04-01 09:00:00', true, 2, 1),
+    ('Atualização de Segurança TI', 'Mantenha seus dispositivos protegidos', 'Todos os colaboradores devem atualizar o antivírus...', '2026-04-02 10:30:00', true, 3, 1),
+    ('Workshop de Design Thinking', 'Inscrições abertas para o time de inovação', 'Venha aprender metodologias ágeis conosco...', '2026-04-03 14:00:00', true, 1, 1),
+    ('Resultado do Trimestre', 'Batemos todas as metas!', 'A Porto Seguro celebra o crescimento de 15%...', '2026-04-04 08:00:00', true, 1, 1),
+    ('Novos Equipamentos de Home Office', 'Saiba como solicitar seu kit', 'A empresa disponibilizará cadeiras e monitores...', '2026-04-05 11:00:00', true, 3, 1),
+    ('Programa de Mentoria Interna', 'Seja um mentor ou um mentorado', 'Estão abertas as inscrições para o ciclo 2026...', '2026-04-06 16:20:00', true, 2, 1),
+    ('Café com o Presidente', 'Próxima edição na sexta-feira', 'Um bate-papo descontraído sobre o futuro...', '2026-04-07 09:15:00', true, 1, 1),
+    ('Dicas de Bem-estar no Trabalho', 'Pausas ativas e ergonomia', 'Cuidar da saúde física é prioridade...', '2026-04-08 10:00:00', true, 2, 1),
+    ('Migração para a Nuvem', 'Nossos sistemas estarão instáveis', 'A manutenção ocorrerá durante o final de semana...', '2026-04-09 22:00:00', true, 3, 1),
+    ('Aniversariantes do Mês', 'Parabéns aos colegas de Abril', 'Confira a lista completa de quem sopra as velinhas...', '2026-04-10 08:30:00', true, 2, 1),
+    ('Novo Processo de Reembolso', 'Mais agilidade e menos burocracia', 'Agora as solicitações são via aplicativo...', '2026-04-11 13:00:00', true, 2, 1),
+    ('Semana da Tecnologia 2026', 'IA e o futuro dos seguros', 'Participe das palestras sobre Inteligência Artificial...', '2026-04-12 14:00:00', true, 3, 1),
+    ('Vaga Interna: Desenvolvedor Senior', 'Oportunidade no time de Canais Digitais', 'Estamos em busca de talentosinternos...', '2026-04-13 10:00:00', true, 2, 1),
+    ('Treinamento de LGPD', 'Obrigatório para todos os funcionários', 'Garanta que estamos em conformidade com os dados...', '2026-04-14 15:00:00', true, 1, 1),
+    ('Parceria com Academias', 'Novos descontos no Gympass', 'Aproveite os novos planos corporativos...', '2026-04-15 09:00:00', true, 2, 1),
+    ('Inauguração do Novo Refeitório', 'Mais espaço e opções saudáveis', 'O bloco B agora conta com um novo restaurante...', '2026-04-16 11:30:00', true, 1, 1),
+    ('Backup Geral de Dados', 'Agendado para hoje às 20h', 'Não deixe arquivos importantes fora da rede...', '2026-04-17 19:00:00', true, 3, 1),
+    ('Concurso de Fotografia Interno', 'Mostre seu talento e ganhe prêmios', 'O tema deste ano é Sustentabilidade...', '2026-04-18 10:45:00', true, 1, 1),
+    ('Uso Consciente do Ar Condicionado', 'Dicas para economia de energia', 'Pequenas ações geram grandes impactos...', '2026-04-19 14:10:00', true, 1, 1),
+    ('Happy Hour da Integração', 'Comemoração dos novos projetos', 'Esperamos todos na área de convivência...', '2026-04-20 17:00:00', true, 1, 1);

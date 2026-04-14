@@ -1,6 +1,7 @@
 package br.com.portoseguro.portalcomunicacao.noticia;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -40,8 +41,13 @@ public class NoticiaController {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso")
     })
     @GetMapping
-    public Page<NoticiaResponse> listar(@ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo") Pageable pageable) {
-        return noticiaService.listar(true, pageable);
+    public Page<NoticiaResponse> listar(
+            @Parameter(description = "Filtro de texto (ignore case)")
+            @RequestParam(required = false) String busca,
+
+            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo")
+            Pageable pageable) {
+        return noticiaService.listar(busca, true, pageable);
     }
 
     @Operation(summary = "Listar todas as notícias", tags = {"Portal Administrativo"})
@@ -52,18 +58,33 @@ public class NoticiaController {
     })
     @GetMapping("/todas")
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
-    public Page<NoticiaResponse> listarTodos(@ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo") Pageable pageable) {
-        return noticiaService.listar(null, pageable);
+    public Page<NoticiaResponse> listarTodos(
+            @Parameter(description = "Filtro de texto (ignore case)")
+            @RequestParam(required = false) String busca,
+
+            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo")
+            Pageable pageable) {
+        return noticiaService.listar(busca, null, pageable);
     }
 
-    @Operation(summary = "Buscar notícia por ID", tags = {"Portal Público"})
+    @Operation(summary = "Buscar notícia por ID (somente ativas)", tags = {"Portal Público"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Notícia não encontrada com o ID fornecido")
     })
     @GetMapping("/{id}")
     public NoticiaResponse buscaPorId(@PathVariable Long id) {
-        return noticiaService.buscarPorId(id);
+        return noticiaService.buscarPorId(id, true);
+    }
+
+    @Operation(summary = "Buscar notícia por ID", tags = {"Portal Administrativo"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Notícia não encontrada com o ID fornecido")
+    })
+    @GetMapping("/admin/{id}")
+    public NoticiaResponse buscaPorIdAdmin(@PathVariable Long id) {
+        return noticiaService.buscarPorId(id, null);
     }
 
     @Operation(summary = "Atualizar notícia", tags = {"Portal Administrativo"})
