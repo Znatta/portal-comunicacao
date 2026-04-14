@@ -20,11 +20,7 @@ public class CategoriaService {
 
         Categoria categoriaSalva = categoriaRepository.save(categoria);
 
-        return new CategoriaResponse(
-                categoriaSalva.getId(),
-                categoriaSalva.getNome(),
-                categoriaSalva.getAtivo()
-        );
+        return new CategoriaResponse(categoriaSalva);
     }
 
     public List<CategoriaResponse> listar(Boolean ativo) {
@@ -33,21 +29,14 @@ public class CategoriaService {
                 : categoriaRepository.findByAtivo(ativo);
 
         return categorias.stream()
-                .map(categoria -> new CategoriaResponse(
-                        categoria.getId(),
-                        categoria.getNome(),
-                        categoria.getAtivo()
-                ))
+                .map(categoria -> new CategoriaResponse(categoria))
                 .toList();
     }
 
-    public CategoriaResponse buscarPorId(Long id) {
+    public CategoriaResponse buscarPorId(Long id, Boolean ativo) {
         return categoriaRepository.findById(id)
-                .map(categoria -> new CategoriaResponse(
-                        categoria.getId(),
-                        categoria.getNome(),
-                        categoria.getAtivo()
-                ))
+                .filter(categoria -> ativo == null || !ativo || categoria.getAtivo())
+                .map(categoria -> new CategoriaResponse(categoria))
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + id));
     }
 
@@ -59,11 +48,7 @@ public class CategoriaService {
 
                     Categoria categoriaAtualizada = categoriaRepository.save(categoria);
 
-                    return new CategoriaResponse(
-                            categoriaAtualizada.getId(),
-                            categoriaAtualizada.getNome(),
-                            categoriaAtualizada.getAtivo()
-                    );
+                    return new CategoriaResponse(categoriaAtualizada);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + id));
     }
@@ -76,11 +61,7 @@ public class CategoriaService {
 
                     Categoria categoriaAtualizada = categoriaRepository.save(categoria);
 
-                    return new CategoriaResponse(
-                            categoriaAtualizada.getId(),
-                            categoriaAtualizada.getNome(),
-                            categoriaAtualizada.getAtivo()
-                    );
+                    return new CategoriaResponse(categoriaAtualizada);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + id));
     }
@@ -93,11 +74,7 @@ public class CategoriaService {
 
                     Categoria categoriaAtualizada = categoriaRepository.save(categoria);
 
-                    return new CategoriaResponse(
-                            categoriaAtualizada.getId(),
-                            categoriaAtualizada.getNome(),
-                            categoriaAtualizada.getAtivo()
-                    );
+                    return new CategoriaResponse(categoriaAtualizada);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID: " + id));
     }
