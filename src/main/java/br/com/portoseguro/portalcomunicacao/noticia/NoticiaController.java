@@ -45,9 +45,12 @@ public class NoticiaController {
             @Parameter(description = "Filtro de texto (ignore case)")
             @RequestParam(required = false) String busca,
 
+            @Parameter(description = "Filtro de categoria (baseado no ID)")
+            @RequestParam(required = false) Long categoriaId,
+
             @ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo")
             Pageable pageable) {
-        return noticiaService.listar(busca, true, pageable);
+        return noticiaService.listar(busca, categoriaId, true, pageable);
     }
 
     @Operation(summary = "Listar todas as notícias", tags = {"Portal Administrativo"})
@@ -62,9 +65,12 @@ public class NoticiaController {
             @Parameter(description = "Filtro de texto (ignore case)")
             @RequestParam(required = false) String busca,
 
+            @Parameter(description = "Filtro de categoria (baseado no ID)")
+            @RequestParam(required = false) Long categoriaId,
+
             @ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo")
             Pageable pageable) {
-        return noticiaService.listar(busca, null, pageable);
+        return noticiaService.listar(busca, categoriaId,null, pageable);
     }
 
     @Operation(summary = "Buscar notícia por ID (somente ativas)", tags = {"Portal Público"})
