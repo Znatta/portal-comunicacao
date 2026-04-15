@@ -29,12 +29,7 @@ public class UsuarioService {
 
         usuarioRepository.save(usuario);
 
-        return new UsuarioResponse(
-                usuario.getId(),
-                usuario.getNome(),
-                usuario.getEmail(),
-                usuario.getAtivo(),
-                usuario.getPerfil().name());
+        return new UsuarioResponse(usuario);
     }
 
     public Page<UsuarioResponse> listar(String nome, String email, Boolean ativo, Pageable pageable) {
@@ -55,24 +50,12 @@ public class UsuarioService {
         Page<Usuario> usuarios = usuarioRepository.findAll(example, pageable);
 
         // 4. Mapeia para o DTO de resposta
-        return usuarios.map(usuario -> new UsuarioResponse(
-                usuario.getId(),
-                usuario.getNome(),
-                usuario.getEmail(),
-                usuario.getAtivo(),
-                usuario.getPerfil().name()
-        ));
+        return usuarios.map(usuario -> new UsuarioResponse(usuario));
     }
 
     public UsuarioResponse buscarPorId(Long id) {
         return usuarioRepository.findById(id)
-                .map(usuario -> new UsuarioResponse(
-                        usuario.getId(),
-                        usuario.getNome(),
-                        usuario.getEmail(),
-                        usuario.getAtivo(),
-                        usuario.getPerfil().name()
-                ))
+                .map(usuario -> new UsuarioResponse(usuario))
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
     }
 
@@ -87,13 +70,7 @@ public class UsuarioService {
 
                     Usuario usuarioAtualizado = usuarioRepository.save(usuario);
 
-                    return new UsuarioResponse(
-                            usuarioAtualizado.getId(),
-                            usuarioAtualizado.getNome(),
-                            usuarioAtualizado.getEmail(),
-                            usuarioAtualizado.getAtivo(),
-                            usuarioAtualizado.getPerfil().name()
-                    );
+                    return new UsuarioResponse(usuarioAtualizado);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
     }
@@ -107,13 +84,7 @@ public class UsuarioService {
 
                     Usuario usuarioAtualizado = usuarioRepository.save(usuario);
 
-                    return new UsuarioResponse(
-                            usuarioAtualizado.getId(),
-                            usuarioAtualizado.getNome(),
-                            usuarioAtualizado.getEmail(),
-                            usuarioAtualizado.getAtivo(),
-                            usuarioAtualizado.getPerfil().name()
-                    );
+                    return new UsuarioResponse(usuarioAtualizado);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
     }
@@ -127,13 +98,7 @@ public class UsuarioService {
 
                     Usuario usuarioAtualizado = usuarioRepository.save(usuario);
 
-                    return new UsuarioResponse(
-                            usuarioAtualizado.getId(),
-                            usuarioAtualizado.getNome(),
-                            usuarioAtualizado.getEmail(),
-                            usuarioAtualizado.getAtivo(),
-                            usuarioAtualizado.getPerfil().name()
-                    );
+                    return new UsuarioResponse(usuarioAtualizado);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
     }
