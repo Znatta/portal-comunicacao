@@ -9,4 +9,8 @@ public record UsuarioResponse(
         Boolean ativo,
         @Schema(allowableValues = {"ADMIN", "PRODUCER"}, description = "Perfil de acesso do usuário")
         String perfil) {
+
+        public UsuarioResponse(Usuario usuario) {
+            this(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getAtivo(), usuario.getPerfil().name());
+        }
 }

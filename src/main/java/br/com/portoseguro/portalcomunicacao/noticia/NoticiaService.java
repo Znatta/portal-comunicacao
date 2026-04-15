@@ -1,13 +1,12 @@
 package br.com.portoseguro.portalcomunicacao.noticia;
 
 import br.com.portoseguro.portalcomunicacao.categoria.CategoriaRepository;
-import br.com.portoseguro.portalcomunicacao.categoria.CategoriaResponse;
 import br.com.portoseguro.portalcomunicacao.usuario.UsuarioRepository;
-import br.com.portoseguro.portalcomunicacao.usuario.UsuarioResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,77 +33,42 @@ public class NoticiaService {
 
         Noticia noticiaSalva = noticiaRepository.save(noticia);
 
-        CategoriaResponse categoria = new CategoriaResponse(
-                noticia.getCategoria().getId(),
-                noticia.getCategoria().getNome(),
-                noticia.getCategoria().getAtivo());
-
-        UsuarioResponse usuario = new UsuarioResponse(
-                noticia.getAutor().getId(),
-                noticia.getAutor().getNome(),
-                noticia.getAutor().getEmail(),
-                noticia.getAutor().getAtivo(),
-                noticia.getAutor().getPerfil().name());
-
-        return new NoticiaResponse(
-                noticiaSalva.getId(),
-                noticiaSalva.getTitulo(),
-                noticiaSalva.getSubtitulo(),
-                noticiaSalva.getConteudo(),
-                noticiaSalva.getDataPublicacao(),
-                noticiaSalva.getAtivo(),
-                categoria,
-                usuario
-        );
+        return new NoticiaResponse(noticiaSalva);
     }
 
-    public Page<NoticiaResponse> listar(Boolean ativo, Pageable pageable) {
-        Page<Noticia> noticias = (ativo == null)
-                ? noticiaRepository.findAll(pageable)
-                : noticiaRepository.findByAtivo(ativo, pageable);
+    public Page<NoticiaResponse> listar(String busca, Long categoriaId, Boolean ativo, Pageable pageable){
+        Specification<Noticia> spec = ((root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
 
-        return noticias.map(noticia -> new NoticiaResponse(
-                        noticia.getId(),
-                        noticia.getTitulo(),
-                        noticia.getSubtitulo(),
-                        noticia.getConteudo(),
-                        noticia.getDataPublicacao(),
-                        noticia.getAtivo(),
-                        new CategoriaResponse(
-                                noticia.getCategoria().getId(),
-                                noticia.getCategoria().getNome(),
-                                noticia.getCategoria().getAtivo()),
-                        new UsuarioResponse(
-                                noticia.getAutor().getId(),
-                                noticia.getAutor().getNome(),
-                                noticia.getAutor().getEmail(),
-                                noticia.getAutor().getAtivo(),
-                                noticia.getAutor().getPerfil().name()
-                        )
-                ));
+        if(busca != null && !busca.isBlank()){
+            spec = spec.and((root, query, criteriaBuilder) -> {
+                String padraoBusca = "%" + busca.toLowerCase() + "%";
+                return criteriaBuilder.or(
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("titulo")), padraoBusca),
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("subtitulo")), padraoBusca),
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("conteudo")), padraoBusca)
+                );
+            });
+        }
+
+        if (categoriaId != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("categoria").get("id"), categoriaId)
+            );
+        }
+
+        if(ativo != null){
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("ativo"), ativo));
+        }
+
+        Page<Noticia> noticias = noticiaRepository.findAll(spec, pageable);
+
+        return  noticias.map(noticia -> new NoticiaResponse(noticia));
     }
 
-    public NoticiaResponse buscarPorId(Long id) {
+    public NoticiaResponse buscarPorId(Long id, Boolean ativo) {
         return noticiaRepository.findById(id)
-                .map(noticia -> new NoticiaResponse(
-                        noticia.getId(),
-                        noticia.getTitulo(),
-                        noticia.getSubtitulo(),
-                        noticia.getConteudo(),
-                        noticia.getDataPublicacao(),
-                        noticia.getAtivo(),
-                        new CategoriaResponse(
-                                noticia.getCategoria().getId(),
-                                noticia.getCategoria().getNome(),
-                                noticia.getCategoria().getAtivo()),
-                        new UsuarioResponse(
-                                noticia.getAutor().getId(),
-                                noticia.getAutor().getNome(),
-                                noticia.getAutor().getEmail(),
-                                noticia.getAutor().getAtivo(),
-                                noticia.getAutor().getPerfil().name()
-                        )
-                ))
+                .filter(noticia -> ativo == null || noticia.getAtivo().equals(ativo))
+                .map(noticia -> new NoticiaResponse(noticia))
                 .orElseThrow(() -> new EntityNotFoundException("Notícia não encontrada com o ID: " + id));
     }
 
@@ -118,31 +82,11 @@ public class NoticiaService {
                     noticia.setDataPublicacao(request.dataPublicacao());
                     noticia.setAtivo(request.ativo());
                     noticia.setCategoria(categoriaRepository.getReferenceById(request.categoriaId()));
+                    noticia.setAutor(usuarioRepository.getReferenceById(request.autorId()));
 
                     Noticia noticiaSalva = noticiaRepository.save(noticia);
 
-                    CategoriaResponse categoria = new CategoriaResponse(
-                            noticia.getCategoria().getId(),
-                            noticia.getCategoria().getNome(),
-                            noticia.getCategoria().getAtivo());
-
-                    UsuarioResponse usuario = new UsuarioResponse(
-                            noticia.getAutor().getId(),
-                            noticia.getAutor().getNome(),
-                            noticia.getAutor().getEmail(),
-                            noticia.getAutor().getAtivo(),
-                            noticia.getAutor().getPerfil().name());
-
-                    return new NoticiaResponse(
-                            noticiaSalva.getId(),
-                            noticiaSalva.getTitulo(),
-                            noticiaSalva.getSubtitulo(),
-                            noticiaSalva.getConteudo(),
-                            noticiaSalva.getDataPublicacao(),
-                            noticiaSalva.getAtivo(),
-                            categoria,
-                            usuario
-                    );
+                    return new NoticiaResponse(noticiaSalva);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Notícia não encontrada com o ID: " + id));
     }
@@ -156,28 +100,7 @@ public class NoticiaService {
 
                     Noticia noticiaAtualizada = noticiaRepository.save(noticia);
 
-                    CategoriaResponse categoria = new CategoriaResponse(
-                            noticia.getCategoria().getId(),
-                            noticia.getCategoria().getNome(),
-                            noticia.getCategoria().getAtivo());
-
-                    UsuarioResponse usuario = new UsuarioResponse(
-                            noticia.getAutor().getId(),
-                            noticia.getAutor().getNome(),
-                            noticia.getAutor().getEmail(),
-                            noticia.getAutor().getAtivo(),
-                            noticia.getAutor().getPerfil().name());
-
-                    return new NoticiaResponse(
-                            noticiaAtualizada.getId(),
-                            noticiaAtualizada.getTitulo(),
-                            noticiaAtualizada.getSubtitulo(),
-                            noticiaAtualizada.getConteudo(),
-                            noticiaAtualizada.getDataPublicacao(),
-                            noticiaAtualizada.getAtivo(),
-                            categoria,
-                            usuario
-                    );
+                    return new NoticiaResponse(noticiaAtualizada);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Notícia não encontrada com o ID: " + id));
     }
@@ -191,28 +114,7 @@ public class NoticiaService {
 
                     Noticia noticiaAtualizada = noticiaRepository.save(noticia);
 
-                    CategoriaResponse categoria = new CategoriaResponse(
-                            noticia.getCategoria().getId(),
-                            noticia.getCategoria().getNome(),
-                            noticia.getCategoria().getAtivo());
-
-                    UsuarioResponse usuario = new UsuarioResponse(
-                            noticia.getAutor().getId(),
-                            noticia.getAutor().getNome(),
-                            noticia.getAutor().getEmail(),
-                            noticia.getAutor().getAtivo(),
-                            noticia.getAutor().getPerfil().name());
-
-                    return new NoticiaResponse(
-                            noticiaAtualizada.getId(),
-                            noticiaAtualizada.getTitulo(),
-                            noticiaAtualizada.getSubtitulo(),
-                            noticiaAtualizada.getConteudo(),
-                            noticiaAtualizada.getDataPublicacao(),
-                            noticiaAtualizada.getAtivo(),
-                            categoria,
-                            usuario
-                    );
+                    return new NoticiaResponse(noticiaAtualizada);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Notícia não encontrada com o ID: " + id));
     }

@@ -1,6 +1,7 @@
 package br.com.portoseguro.portalcomunicacao.security;
 
 import br.com.portoseguro.portalcomunicacao.usuario.Usuario;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ public class AutenticacaoController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
+    @Operation(summary = "Login de usuário", tags = {"Portal Administrativo"})
     @PostMapping
     public LoginResponse login (@Valid @RequestBody LoginRequest request){
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(request.email(), request.senha());

@@ -53,14 +53,24 @@ public class CategoriaController {
         return categoriaService.listar(null);
     }
 
-    @Operation(summary = "Buscar categoria por ID", tags = {"Portal Público"})
+    @Operation(summary = "Buscar categoria por ID (somente ativas)", tags = {"Portal Público"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
     })
     @GetMapping("/{id}")
     public CategoriaResponse buscaPorId(@PathVariable Long id) {
-        return categoriaService.buscarPorId(id);
+        return categoriaService.buscarPorId(id, true);
+    }
+
+    @Operation(summary = "Buscar categoria por ID", tags = {"Portal Administrativo"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
+    })
+    @GetMapping("/admin/{id}")
+    public CategoriaResponse buscaPorIdAdmin(@PathVariable Long id) {
+        return categoriaService.buscarPorId(id, null);
     }
 
     @Operation(summary = "Atualizar categoria", tags = {"Portal Administrativo"})
