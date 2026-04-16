@@ -1,0 +1,1 @@
+ALTER TABLE noticias ADD COLUMN imagem VARCHAR(255);
