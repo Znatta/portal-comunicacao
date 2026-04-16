@@ -10,9 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 import org.springdoc.core.annotations.ParameterObject;
 
 @RestController
@@ -29,14 +30,16 @@ public class NoticiaController {
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado"),
             @ApiResponse(responseCode = "403", description = "Usuário sem permissão (Admin/Producer)")
     })
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
-    public NoticiaResponse criar(@Valid @RequestBody NoticiaRequest request) {
-        return noticiaService.criar(request);
+    public NoticiaResponse criar(
+            @RequestPart("dados") @Valid NoticiaRequest request,
+            @RequestPart("arquivo") MultipartFile arquivo) {
+        return noticiaService.criar(request, arquivo);
     }
 
-    @Operation(summary = "Listar notícias ativas", tags = {"Portal Público"})
+    @Operation(summary = "Listar notícias (ativas)", tags = {"Portal Público"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso")
     })
@@ -53,7 +56,7 @@ public class NoticiaController {
         return noticiaService.listar(busca, categoriaId, true, pageable);
     }
 
-    @Operation(summary = "Listar todas as notícias", tags = {"Portal Administrativo"})
+    @Operation(summary = "Listar notícias (ativas e inativas)", tags = {"Portal Administrativo"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado"),
@@ -101,10 +104,13 @@ public class NoticiaController {
             @ApiResponse(responseCode = "403", description = "Usuário sem permissão (Admin/Producer)"),
             @ApiResponse(responseCode = "404", description = "Notícia não encontrada")
     })
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
-    public NoticiaResponse atualizar(@PathVariable Long id, @Valid @RequestBody NoticiaRequest request) {
-        return noticiaService.atualizar(id, request);
+    public NoticiaResponse atualizar(
+            @PathVariable Long id,
+            @Valid @RequestPart("dados") NoticiaRequest request,
+            @RequestPart(value = "arquivo", required = false) MultipartFile arquivo) {
+        return noticiaService.atualizar(id, request, arquivo);
     }
 
     @Operation(summary = "Inativar notícia", tags = {"Portal Administrativo"})
