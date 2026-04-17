@@ -32,7 +32,7 @@ public class CategoriaController {
         return categoriaService.criar(request);
     }
 
-    @Operation(summary = "Listar categorias ativas", tags = {"Portal Público"})
+    @Operation(summary = "Listar categorias (ativas)", tags = {"Portal Público"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso")
     })
@@ -41,7 +41,7 @@ public class CategoriaController {
         return categoriaService.listar(true);
     }
 
-    @Operation(summary = "Listar todas as categorias", tags = {"Portal Administrativo"})
+    @Operation(summary = "Listar categorias (ativas e inativas)", tags = {"Portal Administrativo"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado"),

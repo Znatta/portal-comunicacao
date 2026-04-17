@@ -44,4 +44,7 @@ public class Noticia {
     @ManyToOne
     @JoinColumn(name = "id_autor")
     private Usuario autor;
+
+    @Column
+    private String imagem;
 }
