@@ -54,3 +54,7 @@ HELP.md
 
 # Gemini CLI Settings
 .gemini/
+
+# Automação de Sincronização
+sync-github.ps1
+temp-mirror-repo-*
