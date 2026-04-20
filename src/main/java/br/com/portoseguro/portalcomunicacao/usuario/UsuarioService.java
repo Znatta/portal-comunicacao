@@ -2,10 +2,9 @@ package br.com.portoseguro.portalcomunicacao.usuario;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,23 +32,28 @@ public class UsuarioService {
     }
 
     public Page<UsuarioResponse> listar(String nome, String email, Boolean ativo, Pageable pageable) {
-        // 1. Cria uma entidade "molde" com os filtros recebidos
-        Usuario filtro = new Usuario();
-        filtro.setNome(nome);
-        filtro.setEmail(email);
-        filtro.setAtivo(ativo);
+        Specification<Usuario> spec = (root, query, cb) -> cb.conjunction();
 
-        // 2. Configura o "Matcher" para ignorar case (maiusculas/minusculas)
-        // e buscar partes da palavra (LIKE %valor%)
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        if (nome != null && !nome.isBlank()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("nome")), "%" + nome.toLowerCase() + "%")
+            );
+        }
 
-        // 3. Monta o exemplo e passa para o repositório
-        Example<Usuario> example = Example.of(filtro, matcher);
-        Page<Usuario> usuarios = usuarioRepository.findAll(example, pageable);
+        if (email != null && !email.isBlank()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("email")), "%" + email.toLowerCase() + "%")
+            );
+        }
 
-        // 4. Mapeia para o DTO de resposta
+        if (ativo != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("ativo"), ativo)
+            );
+        }
+
+        Page<Usuario> usuarios = usuarioRepository.findAll(spec, pageable);
+
         return usuarios.map(usuario -> new UsuarioResponse(usuario));
     }
 
