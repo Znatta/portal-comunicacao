@@ -54,3 +54,6 @@ HELP.md
 
 # Gemini CLI Settings
 .gemini/
+
+# Scripts operacionais e mirrors
+sync-github.ps1

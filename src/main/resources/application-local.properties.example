@@ -1,12 +1,17 @@
-# Exemplo de configuração local - Crie uma cópia deste arquivo chamada application-local.properties
-spring.datasource.url=jdbc:h2:mem:portaldb
-spring.datasource.driver-class-name=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=password
-spring.jpa.show-sql=true
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-
-# Gere uma chave secreta segura para o JWT
-api.security.token.secret=SUA_CHAVE_SECRETA_AQUI
+# Configuração de Banco de Dados (PostgreSQL / Supabase)
+spring.datasource.url=jdbc:postgresql://<HOST_DO_SUPABASE>:6543/postgres?user=postgres.<ID_PROJETO>&password=<SUA_SENHA>
+spring.datasource.username=postgres
+spring.datasource.password=<SUA_SENHA>
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=true
+spring.flyway.enabled=true
+
+# Configurações do Supabase (Storage)
+supabase.url=https://<ID_PROJETO>.supabase.co
+supabase.key=<SUA_API_KEY_SERVICE_ROLE>
+supabase.bucket=noticias
+
+# Segurança (JWT)
+api.security.token.secret=<UMA_CHAVE_JWT_SEGURA_AQUI>
