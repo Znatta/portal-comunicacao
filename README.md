@@ -6,15 +6,17 @@ API REST robusta desenvolvida para o portal de comunicação interno da Porto Se
 
 - **Java 17** (LTS)
 - **Spring Boot 3.5.x**
-- **Spring Security** (Autenticação via JWT Stateless)
-- **Spring Data JPA** (Persistência de dados)
+- **Spring Security & Java JWT** (Autenticação Stateless)
+- **Spring Data JPA & PostgreSQL** (Persistência no Supabase)
+- **Supabase Storage** (Armazenamento de imagens)
 - **Flyway** (Versionamento de Banco de Dados)
-- **H2 Database** (Banco em memória para desenvolvimento local)
+- **H2 Database** (Banco em memória para testes locais)
 - **SpringDoc OpenAPI (Swagger)** (Documentação interativa)
 - **Lombok** (Produtividade no código)
 - **Jakarta Validation** (Validação de Beans)
+- **Docker** (Empacotamento e Deploy)
 - **NotebookLM**: (Análise e contextualização da documentação técnica e arquitetural)
-- **Gemini CLI**: (Refinamento da documentação e auxílio na implementação de boas práticas)
+- **Gemini CLI**: Refinamento de documentação, auxílio em boas práticas e suporte a comandos de Git.
 
 ## 🛠️ Como Rodar Localmente
 
@@ -22,19 +24,27 @@ API REST robusta desenvolvida para o portal de comunicação interno da Porto Se
 
 ```bash
 git clone <url-do-repositorio>
-cd portal-comunicacao
+cd portal-de-comunicacao-porto
 ```
 
-### 2. Configurar Propriedades Locais (⚠️ IMPORTANTE)
+### 2. Configurar Variáveis de Ambiente
 
-Para garantir a segurança, as configurações de banco de dados e segredos de segurança estão protegidas e **não devem ser enviadas ao Git**. Siga os passos abaixo para configurar seu ambiente:
-
-1. Localize o arquivo de exemplo: `src/main/resources/application-local.properties.example`.
-2. Crie uma cópia deste arquivo no mesmo diretório chamada `application-local.properties`.
-3. Edite o novo arquivo `application-local.properties` e informe a sua chave secreta para geração do token:
+O projeto utiliza o Supabase para Banco de Dados e Storage. Certifique-se de configurar as seguintes variáveis no seu ambiente ou no arquivo `application-local.properties`:
 
 ```properties
-api.security.token.secret=INFORME_AQUI_UMA_CHAVE_SECRETA_SEGURA
+# Banco de Dados (PostgreSQL)
+SPRING_DATASOURCE_URL=jdbc:postgresql://<host>:6543/postgres?user=postgres.<id>&password=<senha>
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=<sua-senha>
+SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+
+# Supabase (Storage e API)
+supabase.url=https://<id-projeto>.supabase.co
+supabase.key=<sua-chave-service-role>
+supabase.bucket=noticias
+
+# Segurança
+api.security.token.secret=<sua-chave-jwt>
 ```
 
 ### 3. Executar a aplicação

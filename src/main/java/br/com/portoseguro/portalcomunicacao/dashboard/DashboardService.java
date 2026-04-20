@@ -22,7 +22,7 @@ public class DashboardService {
         Long totalCategorias = categoriaRepository.count();
         Long totalUsuarios = usuarioRepository.count();
 
-        List<Noticia> ultimasNoticias = noticiaRepository.findTop5ByOrderByDataPublicacaoDesc();
+        List<Noticia> ultimasNoticias = noticiaRepository.findTop5ByAtivoTrueOrderByDataPublicacaoDesc();
 
         return DashboardResponse.de(totalNoticias, totalCategorias, totalUsuarios, ultimasNoticias);
     }

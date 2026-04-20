@@ -86,7 +86,8 @@ public class NoticiaService {
         }
 
         if (ativo != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("ativo"), ativo));
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("ativo"), ativo));
         }
 
         Page<Noticia> noticias = noticiaRepository.findAll(spec, pageable);
