@@ -2,6 +2,7 @@ package br.com.portoseguro.portalcomunicacao.noticia;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -34,6 +35,10 @@ public class NoticiaController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public NoticiaResponse criar(
+            @Parameter(
+                    description = "Dados da notícia em formato JSON",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
+            )
             @RequestPart("dados") @Valid NoticiaRequest request,
             @RequestPart("arquivo") MultipartFile arquivo) {
         return noticiaService.criar(request, arquivo);
@@ -108,6 +113,10 @@ public class NoticiaController {
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public NoticiaResponse atualizar(
             @PathVariable Long id,
+            @Parameter(
+                    description = "Dados da notícia em formato JSON",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
+            )
             @Valid @RequestPart("dados") NoticiaRequest request,
             @RequestPart(value = "arquivo", required = false) MultipartFile arquivo) {
         return noticiaService.atualizar(id, request, arquivo);
