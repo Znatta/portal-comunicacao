@@ -94,6 +94,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/categorias/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/noticias").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/noticias/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/newsletter").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/newsletter/unsubscribe/{uuid}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
