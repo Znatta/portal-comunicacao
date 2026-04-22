@@ -15,3 +15,8 @@ supabase.bucket=noticias
 
 # Segurança (JWT)
 api.security.token.secret=<UMA_CHAVE_JWT_SEGURA_AQUI>
+
+# Configurações do Brevo (E-mail)
+brevo.api_key=<SUA_API_KEY_V3>
+brevo.from_email=portal@portoseguro.com.br
+brevo.from_name=Insights Porto
