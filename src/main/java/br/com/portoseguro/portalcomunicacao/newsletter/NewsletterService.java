@@ -92,7 +92,7 @@ public class NewsletterService {
         Context context = new Context();
         context.setVariable("noticias", noticias);
         context.setVariable("token", inscrito.getTokenUnsubscribe());
-        context.setVariable("urlUnsubscribe", "https://portaldeleitura.vercel.app/api/newsletter/unsubscribe");
+        context.setVariable("urlUnsubscribe", "https://portaldeleitura.vercel.app/newsletter/unsubscribe");
 
         String htmlContent = templateEngine.process("newsletter", context);
 
