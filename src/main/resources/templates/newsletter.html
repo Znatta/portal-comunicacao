@@ -121,7 +121,7 @@
 
                     <!-- Lista de Notícias -->
                     <div th:each="noticia : ${noticias}" class="news-card">
-                        <a th:href="${'https://portaldeleitura.vercel.app/noticia/' + noticia.id}" class="news-title" th:text="${noticia.titulo}">
+                        <a th:href="${'https://portaldeleitura.vercel.app/noticias/' + noticia.id}" class="news-title" th:text="${noticia.titulo}">
                             Título da Notícia
                         </a>
                         <div class="news-subtitle" th:text="${noticia.subtitulo}">
