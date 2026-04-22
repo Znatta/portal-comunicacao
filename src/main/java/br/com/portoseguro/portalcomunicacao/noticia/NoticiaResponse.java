@@ -30,11 +30,6 @@ public record NoticiaResponse(
         );
     }
 
-    // Sobrecarga para manter compatibilidade onde a URL não é necessária (ex: testes simples)
-    public NoticiaResponse(Noticia noticia) {
-        this(noticia, "");
-    }
-
     private static String montarUrl(String imagem, String urlBase) {
         if (imagem == null || imagem.isBlank() || urlBase == null || urlBase.isBlank()) {
             return imagem;
