@@ -11,10 +11,10 @@ public record DashboardResponse(
         Long totalUsuarios,
         List<NoticiaResponse> ultimasNoticias) {
 
-    public static DashboardResponse de(Long totalNoticias, Long totalCategorias, Long totalUsuarios, List<Noticia> noticias) {
+    public static DashboardResponse de(Long totalNoticias, Long totalCategorias, Long totalUsuarios, List<Noticia> noticias, String urlBase) {
         List<NoticiaResponse> transformadas = (noticias == null) 
             ? List.of() 
-            : noticias.stream().map(NoticiaResponse::new).toList();
+            : noticias.stream().map(n -> new NoticiaResponse(n, urlBase)).toList();
             
         return new DashboardResponse(totalNoticias, totalCategorias, totalUsuarios, transformadas);
     }

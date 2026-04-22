@@ -1,6 +1,7 @@
 package br.com.portoseguro.portalcomunicacao.dashboard;
 
 import br.com.portoseguro.portalcomunicacao.categoria.CategoriaRepository;
+import br.com.portoseguro.portalcomunicacao.config.SupabaseProperties;
 import br.com.portoseguro.portalcomunicacao.noticia.Noticia;
 import br.com.portoseguro.portalcomunicacao.noticia.NoticiaRepository;
 import br.com.portoseguro.portalcomunicacao.usuario.UsuarioRepository;
@@ -16,6 +17,11 @@ public class DashboardService {
     private final UsuarioRepository usuarioRepository;
     private final CategoriaRepository categoriaRepository;
     private final NoticiaRepository noticiaRepository;
+    private final SupabaseProperties properties;
+
+    private String getPublicUrl() {
+        return properties.url() + "/storage/v1/object/public/" + properties.bucket() + "/";
+    }
 
     public DashboardResponse obterMetricas(){
         Long totalNoticias = noticiaRepository.count();
@@ -24,6 +30,6 @@ public class DashboardService {
 
         List<Noticia> ultimasNoticias = noticiaRepository.findTop5ByAtivoTrueOrderByDataPublicacaoDesc();
 
-        return DashboardResponse.de(totalNoticias, totalCategorias, totalUsuarios, ultimasNoticias);
+        return DashboardResponse.de(totalNoticias, totalCategorias, totalUsuarios, ultimasNoticias, getPublicUrl());
     }
 }
