@@ -9,6 +9,7 @@ API REST robusta desenvolvida para o portal de comunicação interno da Porto Se
 - **Spring Security & Java JWT** (Autenticação Stateless)
 - **Spring Data JPA & PostgreSQL** (Persistência no Supabase)
 - **Supabase Storage** (Armazenamento de imagens)
+- **Brevo (antigo Sendinblue)** (Disparo de e-mails do newsletter)
 - **Flyway** (Versionamento de Banco de Dados)
 - **H2 Database** (Banco em memória para testes locais)
 - **SpringDoc OpenAPI (Swagger)** (Documentação interativa)
@@ -29,22 +30,24 @@ cd portal-de-comunicacao-porto
 
 ### 2. Configurar Variáveis de Ambiente
 
-O projeto utiliza o Supabase para Banco de Dados e Storage. Certifique-se de configurar as seguintes variáveis no seu ambiente ou no arquivo `application-local.properties`:
+O projeto utiliza o Supabase para Banco de Dados/Storage e Brevo para disparos de e-mail. Certifique-se de configurar as seguintes variáveis no seu ambiente ou no arquivo `application-local.properties`:
 
 ```properties
 # Banco de Dados (PostgreSQL)
-SPRING_DATASOURCE_URL=jdbc:postgresql://<host>:6543/postgres?user=postgres.<id>&password=<senha>
+SPRING_DATASOURCE_URL=jdbc:postgresql://<host>:6543/postgres
 SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=<sua-senha>
-SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
 
 # Supabase (Storage e API)
-supabase.url=https://<id-projeto>.supabase.co
-supabase.key=<sua-chave-service-role>
-supabase.bucket=noticias
+SUPABASE_URL=https://<id-projeto>.supabase.co
+SUPABASE_KEY=<sua-chave-anon-ou-service-role>
 
 # Segurança
-api.security.token.secret=<sua-chave-jwt>
+JWT_SECRET=<sua-chave-secreta-para-tokens>
+
+# Brevo (E-mail Marketing / Transacional)
+BREVO_API_KEY=<sua-api-key-v3>
+BREVO_FROM_EMAIL=<seu-email-validado-no-brevo>
 ```
 
 ### 3. Executar a aplicação
