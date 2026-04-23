@@ -13,8 +13,9 @@ supabase.url=https://<ID_PROJETO>.supabase.co
 supabase.key=<SUA_API_KEY_SERVICE_ROLE>
 supabase.bucket=noticias
 
-# Segurança (JWT)
+# Segurança (JWT e CORS)
 api.security.token.secret=<UMA_CHAVE_JWT_SEGURA_AQUI>
+api.cors.allowed-origins=http://localhost:3000,http://localhost:3001
 
 # Configurações do Brevo (E-mail)
 brevo.api_key=<SUA_API_KEY_V3>

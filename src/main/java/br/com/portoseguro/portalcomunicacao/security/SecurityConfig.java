@@ -23,6 +23,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.beans.factory.annotation.Value;
+import java.util.Arrays;
+import java.util.List;
+
 import java.io.PrintWriter;
 
 @Configuration
@@ -32,6 +36,9 @@ import java.io.PrintWriter;
 public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
+
+    @Value("${api.cors.allowed-origins:http://localhost:3000,http://localhost:3001}")
+    private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -116,8 +123,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.addAllowedOrigin("http://localhost:3000");
-        corsConfiguration.addAllowedOrigin("http://localhost:3001");
+        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+
+        corsConfiguration.setAllowedOrigins(origins);
 
         corsConfiguration.addAllowedMethod(HttpMethod.GET);
         corsConfiguration.addAllowedMethod(HttpMethod.POST);
