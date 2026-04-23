@@ -86,8 +86,19 @@ public class NoticiaService {
         }
 
         if (ativo != null) {
-            spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("ativo"), ativo));
+            spec = spec.and((root, query, criteriaBuilder) -> {
+                var noticiaAtiva = criteriaBuilder.equal(root.get("ativo"), ativo);
+                
+                // Se estivermos filtrando por ATIVOS (true), a categoria também deve estar ativa
+                if (Boolean.TRUE.equals(ativo)) {
+                    return criteriaBuilder.and(
+                            noticiaAtiva,
+                            criteriaBuilder.equal(root.get("categoria").get("ativo"), true)
+                    );
+                }
+                
+                return noticiaAtiva;
+            });
         }
 
         Page<Noticia> noticias = noticiaRepository.findAll(spec, pageable);
@@ -97,7 +108,18 @@ public class NoticiaService {
 
     public NoticiaResponse buscarPorId(Long id, Boolean ativo) {
         return noticiaRepository.findById(id)
-                .filter(noticia -> ativo == null || noticia.getAtivo().equals(ativo))
+                .filter(noticia -> {
+                    if (ativo == null) return true;
+                    
+                    boolean noticiaStatusOk = noticia.getAtivo().equals(ativo);
+                    
+                    // Se for busca por ativo (Portal), valida também a categoria
+                    if (Boolean.TRUE.equals(ativo)) {
+                        return noticiaStatusOk && noticia.getCategoria().getAtivo();
+                    }
+                    
+                    return noticiaStatusOk;
+                })
                 .map(noticia -> new NoticiaResponse(noticia, getPublicUrl()))
                 .orElseThrow(() -> new EntityNotFoundException("Notícia não encontrada com o ID: " + id));
     }

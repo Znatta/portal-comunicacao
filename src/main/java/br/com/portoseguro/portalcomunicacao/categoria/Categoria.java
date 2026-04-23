@@ -1,10 +1,13 @@
 package br.com.portoseguro.portalcomunicacao.categoria;
 
+import br.com.portoseguro.portalcomunicacao.noticia.Noticia;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,5 +26,8 @@ public class Categoria {
 
     @Column(nullable = false)
     private Boolean ativo;
+
+    @OneToMany(mappedBy = "categoria")
+    private List<Noticia> noticias;
 
 }
