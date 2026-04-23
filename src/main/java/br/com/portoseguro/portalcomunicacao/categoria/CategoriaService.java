@@ -26,7 +26,7 @@ public class CategoriaService {
     public List<CategoriaResponse> listar(Boolean ativo) {
         List<Categoria> categorias = (ativo == null)
                 ? categoriaRepository.findAll()
-                : categoriaRepository.findByAtivo(ativo);
+                : categoriaRepository.findDistinctByAtivoTrueAndNoticiasAtivoTrue();
 
         return categorias.stream()
                 .map(categoria -> new CategoriaResponse(categoria))
