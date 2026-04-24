@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -55,6 +57,13 @@ public class UsuarioService {
         Page<Usuario> usuarios = usuarioRepository.findAll(spec, pageable);
 
         return usuarios.map(usuario -> new UsuarioResponse(usuario));
+    }
+
+    public List<UsuarioResumoResponse> listarAutores() {
+        return usuarioRepository.findAllByAtivoTrueOrderByNomeAsc()
+                .stream()
+                .map(UsuarioResumoResponse::new)
+                .toList();
     }
 
     public UsuarioResponse buscarPorId(Long id) {
