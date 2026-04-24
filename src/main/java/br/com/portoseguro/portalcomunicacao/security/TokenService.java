@@ -25,6 +25,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("Portal Comunicacao")
                     .withSubject(usuario.getEmail())
+                    .withClaim("role", usuario.getPerfil().name())
                     .withExpiresAt(gerarDataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException ex) {
