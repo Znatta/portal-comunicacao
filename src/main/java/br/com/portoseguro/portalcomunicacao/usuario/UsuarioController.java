@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -20,6 +21,17 @@ import org.springframework.data.domain.Pageable;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+
+    @Operation(summary = "Listar resumo de autores", description = "Retorna apenas ID e Nome de usuários ativos para composição de filtros.", tags = {"Portal Administrativo"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Usuário não autenticado")
+    })
+    @GetMapping("/autores")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PRODUCER')")
+    public List<UsuarioResumoResponse> listarAutores() {
+        return usuarioService.listarAutores();
+    }
 
     @Operation(summary = "Criar usuário", tags = {"Portal Administrativo"})
     @ApiResponses(value = {

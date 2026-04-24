@@ -65,7 +65,7 @@ public class NoticiaService {
         }
     }
 
-    public Page<NoticiaResponse> listar(String busca, Long categoriaId, Boolean ativo, Pageable pageable){
+    public Page<NoticiaResponse> listar(String busca, Long categoriaId, Long autorId, Boolean ativo, Pageable pageable){
         Specification<Noticia> spec = ((root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
 
         if (busca != null && !busca.isBlank()) {
@@ -82,6 +82,12 @@ public class NoticiaService {
         if (categoriaId != null) {
             spec = spec.and((root, query, cb) ->
                     cb.equal(root.get("categoria").get("id"), categoriaId)
+            );
+        }
+
+        if (autorId != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("autor").get("id"), autorId)
             );
         }
 

@@ -26,6 +26,6 @@ public class AutenticacaoController {
         Authentication auth = authenticationManager.authenticate(usernamePassword);
         Usuario usuario = (Usuario) auth.getPrincipal();
         String tokenJWT = tokenService.gerarToken(usuario);
-        return new LoginResponse(tokenJWT);
+        return new LoginResponse(tokenJWT, usuario.getNome(), usuario.getEmail(), usuario.getPerfil());
     }
 }

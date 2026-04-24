@@ -1,4 +1,11 @@
 package br.com.portoseguro.portalcomunicacao.security;
 
-public record LoginResponse(String token) {
+import br.com.portoseguro.portalcomunicacao.usuario.UsuarioPerfil;
+
+public record LoginResponse(
+        String token,
+        String nome,
+        String email,
+        UsuarioPerfil perfil
+) {
 }

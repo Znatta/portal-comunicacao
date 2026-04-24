@@ -23,7 +23,7 @@ public class DashboardController {
             @ApiResponse(responseCode = "403", description = "Usuário sem permissão (Admin)")
     })
     @GetMapping()
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public DashboardResponse obterMetricas() {
         return dashboardService.obterMetricas();
     }
