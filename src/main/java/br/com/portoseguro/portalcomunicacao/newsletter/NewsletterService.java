@@ -1,11 +1,11 @@
 package br.com.portoseguro.portalcomunicacao.newsletter;
 
 import br.com.portoseguro.portalcomunicacao.config.BrevoProperties;
+import br.com.portoseguro.portalcomunicacao.config.SupabaseProperties;
 import br.com.portoseguro.portalcomunicacao.noticia.Noticia;
 import br.com.portoseguro.portalcomunicacao.noticia.NoticiaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,6 +28,11 @@ public class NewsletterService {
     private final WebClient brevoWebClient;
     private final TemplateEngine templateEngine;
     private final BrevoProperties brevoProperties;
+    private final SupabaseProperties supabaseProperties;
+
+    private String getPublicUrl() {
+        return supabaseProperties.url() + "/storage/v1/object/public/" + supabaseProperties.bucket() + "/";
+    }
 
     public void inscrever(NewsletterRequest request){
         Optional<Newsletter> existente = newsletterRepository.findByEmail(request.email());
@@ -91,6 +96,7 @@ public class NewsletterService {
     private void enviarParaInscrito(Newsletter inscrito, List<Noticia> noticias, String data) {
         Context context = new Context();
         context.setVariable("noticias", noticias);
+        context.setVariable("baseUrl", getPublicUrl());
         context.setVariable("token", inscrito.getTokenUnsubscribe());
         context.setVariable("urlUnsubscribe", "https://portaldeleitura.vercel.app/newsletter/unsubscribe");
 
