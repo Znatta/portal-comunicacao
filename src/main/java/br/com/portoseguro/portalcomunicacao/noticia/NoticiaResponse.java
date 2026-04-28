@@ -14,7 +14,11 @@ public record NoticiaResponse(
         Boolean ativo,
         CategoriaResponse categoria,
         UsuarioResponse autor,
-        String imagem) {
+        String imagem,
+        LocalDateTime dataCriacao,
+        LocalDateTime dataAtualizacao,
+        String criadoPor,
+        String atualizadoPor) {
 
     public NoticiaResponse(Noticia noticia, String urlBase) {
         this(
@@ -26,7 +30,11 @@ public record NoticiaResponse(
                 noticia.getAtivo(),
                 new CategoriaResponse(noticia.getCategoria()),
                 new UsuarioResponse(noticia.getAutor()),
-                montarUrl(noticia.getImagem(), urlBase)
+                montarUrl(noticia.getImagem(), urlBase),
+                noticia.getDataCriacao(),
+                noticia.getDataAtualizacao(),
+                noticia.getCriadoPor(),
+                noticia.getAtualizadoPor()
         );
     }
 

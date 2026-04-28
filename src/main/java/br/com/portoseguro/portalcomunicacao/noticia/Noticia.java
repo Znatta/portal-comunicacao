@@ -1,6 +1,7 @@
 package br.com.portoseguro.portalcomunicacao.noticia;
 
 import br.com.portoseguro.portalcomunicacao.categoria.Categoria;
+import br.com.portoseguro.portalcomunicacao.infra.audit.AuditoriaBase;
 import br.com.portoseguro.portalcomunicacao.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "noticias")
-public class Noticia {
+public class Noticia extends AuditoriaBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
