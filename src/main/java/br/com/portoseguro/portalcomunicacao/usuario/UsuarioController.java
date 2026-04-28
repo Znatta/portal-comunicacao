@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
+@Slf4j
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -30,6 +32,7 @@ public class UsuarioController {
     @GetMapping("/autores")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'PRODUCER')")
     public List<UsuarioResumoResponse> listarAutores() {
+        log.info("Requisição para listar resumo de autores (ativos)");
         return usuarioService.listarAutores();
     }
 
@@ -42,9 +45,9 @@ public class UsuarioController {
     })
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('ADMIN')") // Comentar para criar primeiro usr admin
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public UsuarioResponse criar(@Valid @RequestBody UsuarioRequest request) {
-
+        log.info("Requisição para criar novo usuário: {} ({})", request.nome(), request.email());
         return usuarioService.criar(request);
     }
 
@@ -69,7 +72,7 @@ public class UsuarioController {
             @ParameterObject
             @PageableDefault(page = 0, size = 10, sort = "nome")
             Pageable pageable) {
-
+        log.info("Requisição para listar usuários. Filtros - Nome: {}, Email: {}, Ativo: {}", nome, email, ativo);
         return usuarioService.listar(nome, email, ativo, pageable);
     }
 
@@ -83,6 +86,7 @@ public class UsuarioController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public UsuarioResponse buscaPorId(@PathVariable Long id) {
+        log.info("Requisição para buscar usuário ID: {}", id);
         return usuarioService.buscarPorId(id);
     }
 
@@ -97,6 +101,7 @@ public class UsuarioController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public UsuarioResponse atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioAtualizacaoRequest request) {
+        log.info("Requisição para atualizar usuário ID: {}", id);
         return usuarioService.atualizar(id, request);
     }
 
@@ -110,6 +115,7 @@ public class UsuarioController {
     @PatchMapping("/{id}/inativar")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public UsuarioResponse inativar(@PathVariable Long id) {
+        log.info("Requisição para inativar usuário ID: {}", id);
         return usuarioService.inativar(id);
     }
 
@@ -123,6 +129,7 @@ public class UsuarioController {
     @PatchMapping("/{id}/ativar")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public UsuarioResponse ativar(@PathVariable Long id) {
+        log.info("Requisição para ativar usuário ID: {}", id);
         return usuarioService.ativar(id);
     }
 }

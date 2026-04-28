@@ -121,11 +121,21 @@
 
                     <!-- Lista de Notícias -->
                     <div th:each="noticia : ${noticias}" class="news-card">
+                        <!-- Imagem da Notícia -->
+                        <div th:if="${noticia.imagem != null}" style="margin-bottom: 12px;">
+                            <img th:src="${baseUrl + noticia.imagem}" 
+                                 style="width: 100%; max-width: 540px; height: auto; border-radius: 6px; display: block;" 
+                                 alt="Capa da notícia">
+                        </div>
+
                         <a th:href="${'https://portaldeleitura.vercel.app/noticias/' + noticia.id}" class="news-title" th:text="${noticia.titulo}">
                             Título da Notícia
                         </a>
-                        <div class="news-subtitle" th:text="${noticia.subtitulo}">
-                            Resumo da notícia para captar a atenção do colaborador.
+                        <div class="news-subtitle" style="margin-bottom: 8px; font-weight: bold;" th:text="${noticia.subtitulo}">
+                            Subtítulo da notícia.
+                        </div>
+                        <div class="news-subtitle" th:text="${#strings.abbreviate(noticia.conteudo, 150)}">
+                            Trecho do conteúdo da notícia para gerar curiosidade...
                         </div>
                     </div>
 

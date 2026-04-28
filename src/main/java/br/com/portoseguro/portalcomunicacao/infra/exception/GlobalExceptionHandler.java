@@ -42,6 +42,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(erros);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErroPadrao> tratarErro500(Exception ex) {
+        log.error("Erro interno inesperado: {}", ex.getMessage(), ex);
+
+        ErroPadrao erro = new ErroPadrao(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Erro interno",
+                "Ocorreu um erro inesperado no servidor. Tente novamente mais tarde."
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
+    }
+
     // Record auxiliar para detalhar erros de validação por campo
     public record DadosErroValidacao(String campo, String mensagem) {
         public DadosErroValidacao(FieldError erro) {

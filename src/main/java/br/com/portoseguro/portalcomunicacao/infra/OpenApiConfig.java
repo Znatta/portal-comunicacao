@@ -5,16 +5,19 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@Slf4j
 public class OpenApiConfig {
 
     private static final String SECURITY_SCHEME_NAME = "bearer-jwt";
 
     @Bean
     public OpenAPI portalComunicacaoOpenAPI() {
+        log.info("Inicializando Documentação Swagger/OpenAPI...");
         return new OpenAPI()
                 .info(new Info()
                         .title("Portal Comunicação API")

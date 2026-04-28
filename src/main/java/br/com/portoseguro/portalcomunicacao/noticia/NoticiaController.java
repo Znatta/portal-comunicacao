@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +21,7 @@ import org.springdoc.core.annotations.ParameterObject;
 @RestController
 @RequestMapping("/api/noticias")
 @RequiredArgsConstructor
+@Slf4j
 public class NoticiaController {
 
     private final NoticiaService noticiaService;
@@ -41,6 +43,7 @@ public class NoticiaController {
             )
             @RequestPart("dados") @Valid NoticiaRequest request,
             @RequestPart("arquivo") MultipartFile arquivo) {
+        log.info("Requisição para criar notícia: {}", request.titulo());
         return noticiaService.criar(request, arquivo);
     }
 
@@ -61,6 +64,7 @@ public class NoticiaController {
 
             @ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo")
             Pageable pageable) {
+        log.info("Requisição para listar notícias (Portal Público). Filtros - Busca: {}, Categoria: {}, Autor: {}", busca, categoriaId, autorId);
         return noticiaService.listar(busca, categoriaId, autorId, true, pageable);
     }
 
@@ -84,6 +88,7 @@ public class NoticiaController {
 
             @ParameterObject @PageableDefault(page = 0, size = 10, sort = "titulo")
             Pageable pageable) {
+        log.info("Requisição para listar todas as notícias (Portal Administrativo). Filtros - Busca: {}, Categoria: {}, Autor: {}", busca, categoriaId, autorId);
         return noticiaService.listar(busca, categoriaId, autorId, null, pageable);
     }
 
@@ -94,6 +99,7 @@ public class NoticiaController {
     })
     @GetMapping("/{id}")
     public NoticiaResponse buscaPorId(@PathVariable Long id) {
+        log.info("Requisição para buscar notícia ID: {} (Portal Público)", id);
         return noticiaService.buscarPorId(id, true);
     }
 
@@ -104,6 +110,7 @@ public class NoticiaController {
     })
     @GetMapping("/admin/{id}")
     public NoticiaResponse buscaPorIdAdmin(@PathVariable Long id) {
+        log.info("Requisição para buscar notícia ID: {} (Portal Administrativo)", id);
         return noticiaService.buscarPorId(id, null);
     }
 
@@ -125,6 +132,7 @@ public class NoticiaController {
             )
             @Valid @RequestPart("dados") NoticiaRequest request,
             @RequestPart(value = "arquivo", required = false) MultipartFile arquivo) {
+        log.info("Requisição para atualizar notícia ID: {}", id);
         return noticiaService.atualizar(id, request, arquivo);
     }
 
@@ -138,6 +146,7 @@ public class NoticiaController {
     @PatchMapping("/{id}/inativar")
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public NoticiaResponse inativar(@PathVariable Long id) {
+        log.info("Requisição para inativar notícia ID: {}", id);
         return noticiaService.inativar(id);
     }
 
@@ -151,6 +160,7 @@ public class NoticiaController {
     @PatchMapping("/{id}/ativar")
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public NoticiaResponse ativar(@PathVariable Long id) {
+        log.info("Requisição para ativar notícia ID: {}", id);
         return noticiaService.ativar(id);
     }
 }
