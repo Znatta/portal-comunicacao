@@ -1,5 +1,6 @@
 package br.com.portoseguro.portalcomunicacao.categoria;
 
+import br.com.portoseguro.portalcomunicacao.infra.audit.AuditoriaBase;
 import br.com.portoseguro.portalcomunicacao.noticia.Noticia;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "categorias")
-public class Categoria {
+public class Categoria extends AuditoriaBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
