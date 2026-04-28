@@ -79,5 +79,12 @@ O deploy é realizado no **Render** via **Docker**. Caso você utilize um reposi
 
 Acesse: `http://localhost:8080/swagger-ui.html`
 
+## 🔐 Controle de Acesso (Perfis)
+
+O sistema opera com dois níveis de permissão no Portal Administrativo:
+
+- **ADMIN:** Acesso total a todos os recursos, incluindo gestão de usuários, categorias, notícias e métricas.
+- **PRODUCER:** Perfil de editor. Pode gerenciar notícias e categorias, visualizar métricas do dashboard e listar autores para filtros, mas **não possui acesso** ao CRUD de usuários.
+
 ---
 Desenvolvido com ❤️ pelo **Time Academy** | **VILT Group - Breaking Boundaries**
