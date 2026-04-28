@@ -6,12 +6,14 @@ import br.com.portoseguro.portalcomunicacao.noticia.Noticia;
 import br.com.portoseguro.portalcomunicacao.noticia.NoticiaRepository;
 import br.com.portoseguro.portalcomunicacao.usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DashboardService {
 
     private final UsuarioRepository usuarioRepository;
@@ -24,12 +26,16 @@ public class DashboardService {
     }
 
     public DashboardResponse obterMetricas(){
+        log.debug("Iniciando coleta de métricas para o dashboard");
+        
         Long totalNoticias = noticiaRepository.count();
         Long totalCategorias = categoriaRepository.count();
         Long totalUsuarios = usuarioRepository.count();
 
+        log.debug("Contagens finalizadas. Buscando as 5 últimas notícias ativas.");
         List<Noticia> ultimasNoticias = noticiaRepository.findTop5ByAtivoTrueOrderByDataPublicacaoDesc();
 
+        log.info("Métricas do dashboard consolidadas com sucesso.");
         return DashboardResponse.de(totalNoticias, totalCategorias, totalUsuarios, ultimasNoticias, getPublicUrl());
     }
 }

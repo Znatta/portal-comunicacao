@@ -21,3 +21,6 @@ api.cors.allowed-origins=http://localhost:3000,http://localhost:3001
 brevo.api_key=<SUA_API_KEY_V3>
 brevo.from_email=portal@portoseguro.com.br
 brevo.from_name=Insights Porto
+
+# Define o nível de log padrão para toda a aplicação
+logging.level.root=INFO

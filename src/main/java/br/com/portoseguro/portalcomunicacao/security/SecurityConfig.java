@@ -4,6 +4,7 @@ import br.com.portoseguro.portalcomunicacao.infra.exception.GlobalExceptionHandl
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,7 @@ import java.io.PrintWriter;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
@@ -47,6 +49,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(exception -> exception
                     .authenticationEntryPoint((req, res, e) -> {
+                        log.warn("Acesso não autorizado: {} em {}", e.getMessage(), req.getRequestURI());
                         // Resposta 401 customizada em JSON
                         res.setStatus(HttpStatus.UNAUTHORIZED.value());
                         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -68,6 +71,7 @@ public class SecurityConfig {
                         out.flush();
                     })
                     .accessDeniedHandler((req, res, e) -> {
+                        log.warn("Acesso negado para o usuário: {} em {}", req.getUserPrincipal() != null ? req.getUserPrincipal().getName() : "Anônimo", req.getRequestURI());
                         // Resposta 403 customizada em JSON
                         res.setStatus(HttpStatus.FORBIDDEN.value());
                         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
