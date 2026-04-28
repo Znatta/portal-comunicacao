@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categorias")
 @RequiredArgsConstructor
+@Slf4j
 public class CategoriaController {
 
     private final CategoriaService categoriaService;
@@ -29,6 +31,7 @@ public class CategoriaController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public CategoriaResponse criar(@Valid @RequestBody CategoriaRequest request) {
+        log.info("Requisição para criar categoria: {}", request.nome());
         return categoriaService.criar(request);
     }
 
@@ -38,6 +41,7 @@ public class CategoriaController {
     })
     @GetMapping
     public List<CategoriaResponse> listar() {
+        log.info("Requisição para listar categorias (somente ativas com notícias)");
         return categoriaService.listar(true);
     }
 
@@ -50,6 +54,7 @@ public class CategoriaController {
     @GetMapping("/todas")
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public List<CategoriaResponse> listarTodos() {
+        log.info("Requisição para listar todas as categorias (Portal Administrativo)");
         return categoriaService.listar(null);
     }
 
@@ -60,6 +65,7 @@ public class CategoriaController {
     })
     @GetMapping("/{id}")
     public CategoriaResponse buscaPorId(@PathVariable Long id) {
+        log.info("Requisição para buscar categoria ID: {} (Portal Público)", id);
         return categoriaService.buscarPorId(id, true);
     }
 
@@ -70,6 +76,7 @@ public class CategoriaController {
     })
     @GetMapping("/admin/{id}")
     public CategoriaResponse buscaPorIdAdmin(@PathVariable Long id) {
+        log.info("Requisição para buscar categoria ID: {} (Portal Administrativo)", id);
         return categoriaService.buscarPorId(id, null);
     }
 
@@ -84,6 +91,7 @@ public class CategoriaController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public CategoriaResponse atualizar(@PathVariable Long id, @Valid @RequestBody CategoriaRequest request) {
+        log.info("Requisição para atualizar categoria ID: {}", id);
         return categoriaService.atualizar(id, request);
     }
 
@@ -97,6 +105,7 @@ public class CategoriaController {
     @PatchMapping("/{id}/inativar")
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public CategoriaResponse inativar(@PathVariable Long id) {
+        log.info("Requisição para inativar categoria ID: {}", id);
         return categoriaService.inativar(id);
     }
 
@@ -110,6 +119,7 @@ public class CategoriaController {
     @PatchMapping("/{id}/ativar")
     @PreAuthorize("hasAnyAuthority('ADMIN','PRODUCER')")
     public CategoriaResponse ativar(@PathVariable Long id) {
+        log.info("Requisição para ativar categoria ID: {}", id);
         return categoriaService.ativar(id);
     }
 }
