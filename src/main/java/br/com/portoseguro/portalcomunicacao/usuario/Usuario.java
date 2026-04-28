@@ -1,5 +1,6 @@
 package br.com.portoseguro.portalcomunicacao.usuario;
 
+import br.com.portoseguro.portalcomunicacao.infra.audit.AuditoriaBase;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "usuarios")
-public class Usuario implements UserDetails {
+public class Usuario extends AuditoriaBase implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
